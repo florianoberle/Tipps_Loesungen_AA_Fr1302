@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktive Lernhilfe | Vektorgeometrie</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --accent-color: #3b86fe;
+            --accent-hover: #5397ff;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --tip-bg: #2c2c2c;
+            --sub-tip-bg: #333333;
+            --border-radius: 12px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding: 40px 20px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-align: center;
+            letter-spacing: -0.02em;
+        }
+
+        .task {
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            background-color: var(--surface-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .task h2 {
+            margin: 0;
+            padding: 18px 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background-color: var(--surface-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .task h2:hover {
+            background-color: #252525;
+            color: var(--accent-color);
+        }
+
+        .task h2::after {
+            content: '→';
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .active-task h2::after {
+            transform: rotate(90deg);
+        }
+
+        .tip-container {
+            display: none;
+            padding: 10px 20px 20px 20px;
+            border-top: 1px solid #333;
+        }
+
+        .active-task .tip-container {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tip {
+            background-color: var(--tip-bg);
+            padding: 15px;
+            margin-top: 12px;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .tip:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            background-color: #353535;
+        }
+
+        .tip strong {
+            display: block;
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 5px;
+        }
+
+        .tip-content {
+            display: none;
+            margin-top: 10px;
+            color: var(--text-primary);
+        }
+
+        .sub-tip {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: var(--sub-tip-bg);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+
+        .sub-tip strong {
+            color: #fff;
+        }
+
+        .expand-button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background-color: transparent;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .expand-button:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .show {
+            display: block !important;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        ins { text-decoration: underline; color: #ff5252; }
+    </style>
+
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<h1>Zwischenergebnisse und Lösungen (S. 102/103)</h1>
+
+<div class="task" id="task-a">
+    <h2 onclick="showTask('a')">A8</h2>
+    <div class="tip-container">
+        <div class="tip" onclick="toggleTip(event, 'a1')">
+            a)
+            <div class="tip-content" id="a1">
+                <div class="sub-tip" onclick="toggleTip(event, 'a1_sub')">
+                    Grenzen der Intervalle: Nullstellen von \(f'\)
+                    <div class="tip-content" id="a1_sub">\[x_1=-4\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a1_sub2')">
+                    Intervalle
+                    <div class="tip-content" id="a1_sub2">\[I_1=(-\infty;-4) \quad \quad I_2=(-4;\infty)\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a1_sub3')">
+                    Lösung
+                    <div class="tip-content" id="a1_sub3">
+                        <p> \(f(-5)=-2<0 \quad \quad \Rightarrow\) \(f\) ist in \(I_1=(-\infty;-4)\) smf.</p>
+                        <p> \(f(0)=8>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_2=(-4;\infty)\) smw.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event, 'a2')">
+            b)
+            <div class="tip-content" id="a2">
+                <div class="sub-tip" onclick="toggleTip(event, 'a2_sub')">
+                    Grenzen der Intervalle: Nullstellen von \(f'\)
+                    <div class="tip-content" id="a2_sub">\[x_1=-4 \quad \quad x_2=0\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a2_sub2')">
+                    Intervalle
+                    <div class="tip-content" id="a2_sub2">\[I_1=(-\infty;-4) \quad \quad I_2=(-4;0) \quad \quad I_3=(0;\infty)\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a2_sub3')">
+                    Lösung
+                    <div class="tip-content" id="a2_sub3">
+                        <p> \(f(-5)=12,5>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_1\) smw.</p>
+                        <p> \(f(-1)=-7,5<0 \quad \quad \Rightarrow\) \(f\) ist in \(I_2\) smf.</p>
+                        <p> \(f(1)=12,5>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_3\) smw.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event, 'a3')">
+            c)
+            <div class="tip-content" id="a3">
+                <div class="sub-tip" onclick="toggleTip(event, 'a3_sub')">
+                    Grenzen der Intervalle: Nullstellen von \(f'\)
+                    <div class="tip-content" id="a3_sub">\[x_1=2\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a3_sub2')">
+                    Intervalle
+                    <div class="tip-content" id="a3_sub2">\[I_1=(-\infty;2) \quad \quad I_2=(2;\infty)\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a3_sub3')">
+                    Lösung
+                    <div class="tip-content" id="a3_sub3">
+                        <p> \(f(0)=-8<0 \quad \quad \Rightarrow\) \(f\) ist in \(I_1\) smf.</p>
+                        <p> \(f(3)=19>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_2\) smw.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event, 'a4')">
+            d)
+            <div class="tip-content" id="a4">
+                <div class="sub-tip" onclick="toggleTip(event, 'a4_sub')">
+                    Grenzen der Intervalle: Nullstellen von \(f'\)
+                    <div class="tip-content" id="a4_sub">\[x_1=0 \quad \quad x_2=1\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a4_sub2')">
+                    Intervalle
+                    <div class="tip-content" id="a4_sub2">\[I_1=(-\infty;0) \quad \quad I_2=(0;1) \quad \quad I_3=(1;\infty)\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a4_sub3')">
+                    Lösung
+                    <div class="tip-content" id="a4_sub3">
+                        <p> \(f(-1)=2>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_1\) smw.</p>
+                        <p> \(f(0,5)=-0,0625<0 \quad \quad \Rightarrow\) \(f\) ist in \(I_2\) smf.</p>
+                        <p> \(f(2)=8>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_3\) smw.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event, 'a5')">
+            e)
+            <div class="tip-content" id="a5">
+                <div class="sub-tip" onclick="toggleTip(event, 'a5_sub')">
+                    Grenzen der Intervalle: Nullstellen von \(f'\)
+                    <div class="tip-content" id="a5_sub">\[x_1=-2\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a5_sub2')">
+                    Intervalle
+                    <div class="tip-content" id="a5_sub2">\[I_1=(-\infty;-2) \quad \quad I_2=(-2;\infty)\]</div>
+                </div>
+                <div class="sub-tip" onclick="toggleTip(event, 'a5_sub3')">
+                    Lösung
+                    <div class="tip-content" id="a5_sub3">
+                        <p> \(f(-3)=1>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_1\) smw.</p>
+                        <p> \(f(0)=4>0 \quad \quad \Rightarrow\) \(f\) ist in \(I_2\) smw.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="expand-button" onclick="expandAllInTask(this, 'task-a')">Alle Lösungen von A8 anzeigen</button>
+    </div>
+</div>
+
+<div class="task" id="task-A9">
+    <h2 onclick="showTask('A9')">A9</h2>
+    <div class="tip-container">
+        <div class="tip" onclick="toggleTip(event,'A91')">
+            Lösung
+            <div class="tip-content" id="A91">
+                <div class="sub-tip" onclick="toggleTip(event,'A91_sub')">
+                    <p>(1) und A</p>
+                    <p>(2) und C</p>
+                    <p>(3) und D</p>
+                    <p>(4) und B</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="task" id="task-A11">
+    <h2 onclick="showTask('A11')">A11</h2>
+    <div class="tip-container">
+        <div class="tip" onclick="toggleTip(event,'A11-1')">
+            Tipp
+            <div class="tip-content" id="A11-1">
+                <div class="sub-tip" onclick="toggleTip(event,'A11-1_sub')">
+                 Argumentiere mit dem Monotoniesatz. Gilt \(f'(x)>0\) oder \(f'(x)<0\)?
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event,'A11-2')">
+            Lösung a)
+            <div class="tip-content" id="A11-2">
+                <div class="sub-tip" onclick="toggleTip(event,'A11-2_sub')">
+                 Die Aussage ist wahr. Wenn der Graph von \(f'\) in dem Intervall \(I\) oberhalb der \(x\)-Achse verläuft, gilt \(f'(x)>0\). Aus dem Monotoniesatz folgt damit, dass \(f\) in diesem Intervall \(I\) smw ist.
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event,'A11-3')">
+            Lösung b)
+            <div class="tip-content" id="A11-3">
+                <div class="sub-tip" onclick="toggleTip(event,'A11-3_sub')">
+                 Die Aussage ist falsch. Gegenbeispiel: Für die Ableitung von \(f(x)=x^2\) gilt \(f'(x)=2x\). \(f'\) ist damit überall smw (Ursprungsgerade mit der Steigung 2). \(f\) ist aber in \(I=(-\infty,0)\) smf (Normalparabel).
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="task" id="task-A12">
+    <h2 onclick="showTask('A12')">A12</h2>
+    <div class="tip-container">
+        <div class="tip" onclick="toggleTip(event,'A12-1')">
+            Tipp
+            <div class="tip-content" id="A12-1">
+                <div class="sub-tip" onclick="toggleTip(event,'A12-1_sub')">
+                 Argumentiere mit dem Monotoniesatz. Gilt \(f'(x)>0\) oder \(f'(x)<0\)?
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event,'A12-2')">
+            Lösung a)
+            <div class="tip-content" id="A12-2">
+                <div class="sub-tip" onclick="toggleTip(event,'A12-2_sub')">
+                 Die Aussage ist wahr. Im Intervall \(I=(2;3)\) gilt \(f'(x)<0\). Aus dem Monotoniesatz folgt damit, dass \(f\) in diesem Intervall smf ist.
+                </div>
+            </div>
+        </div>
+        <div class="tip" onclick="toggleTip(event,'A12-3')">
+            Lösung b)
+            <div class="tip-content" id="A12-3">
+                <div class="sub-tip" onclick="toggleTip(event,'A12-3_sub')">
+                Die Aussage ist falsch. Im Intervall \(I=(0;1)\) gilt \(f'(x)>0\). Aus dem Monotoniesatz folgt damit, dass \(f\) in diesem Intervall smw ist und nicht smf.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTask(taskId) {
+        const taskElement = document.getElementById(`task-${taskId}`);
+        const isActive = taskElement.classList.contains('active-task');
+        
+        document.querySelectorAll('.task').forEach(t => t.classList.remove('active-task'));
+        if (!isActive) taskElement.classList.add('active-task');
+    }
+
+    function toggleTip(event, id) {
+        event.stopPropagation();
+        const content = document.getElementById(id);
+        content.classList.toggle('show');
+    }
+
+    function expandAllInTask(btn, taskId) {
+        const task = document.getElementById(taskId);
+        const allTipContents = task.querySelectorAll('.tip-content');
+        
+        // Prüfen, ob bereits alle (oder die meisten) eingeblendet sind
+        const anyHidden = Array.from(allTipContents).some(content => !content.classList.contains('show'));
+
+        if (anyHidden) {
+            // Alle aufklappen
+            allTipContents.forEach(content => content.classList.add('show'));
+            btn.textContent = "Alle Lösungen von A8 ausblenden";
+        } else {
+            // Alle zuklappen
+            allTipContents.forEach(content => content.classList.remove('show'));
+            btn.textContent = "Alle Lösungen von A8 anzeigen";
+        }
+    }
+</script>
+
+</body>
+</html>
